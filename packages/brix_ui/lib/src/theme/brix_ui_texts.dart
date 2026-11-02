@@ -13,6 +13,9 @@ class BrixUiTexts {
     this.hidePassword = 'Hide password',
     this.requiredField = 'This field is required.',
     this.selectHint = 'Choose',
+    this.searchHint = 'Search',
+    this.noResults = 'No results',
+    this.useFreeText = 'Use "{value}"',
   });
 
   /// The button that closes a dialog.
@@ -36,6 +39,16 @@ class BrixUiTexts {
   /// Shown in an empty `BrixSelect`.
   final String selectHint;
 
+  /// The search box of a searchable `BrixSelect` sheet.
+  final String searchHint;
+
+  /// Shown when a search finds nothing.
+  final String noResults;
+
+  /// The row that takes typed text that matches no option in
+  /// `BrixSearchField`; `{value}` is replaced with the text.
+  final String useFreeText;
+
   BrixUiTexts copyWith({
     String? ok,
     String? warningTitle,
@@ -44,6 +57,9 @@ class BrixUiTexts {
     String? hidePassword,
     String? requiredField,
     String? selectHint,
+    String? searchHint,
+    String? noResults,
+    String? useFreeText,
   }) {
     return BrixUiTexts(
       ok: ok ?? this.ok,
@@ -53,6 +69,9 @@ class BrixUiTexts {
       hidePassword: hidePassword ?? this.hidePassword,
       requiredField: requiredField ?? this.requiredField,
       selectHint: selectHint ?? this.selectHint,
+      searchHint: searchHint ?? this.searchHint,
+      noResults: noResults ?? this.noResults,
+      useFreeText: useFreeText ?? this.useFreeText,
     );
   }
 
@@ -65,7 +84,10 @@ class BrixUiTexts {
       other.showPassword == showPassword &&
       other.hidePassword == hidePassword &&
       other.requiredField == requiredField &&
-      other.selectHint == selectHint;
+      other.selectHint == selectHint &&
+      other.searchHint == searchHint &&
+      other.noResults == noResults &&
+      other.useFreeText == useFreeText;
 
   @override
   int get hashCode => Object.hash(
@@ -76,5 +98,8 @@ class BrixUiTexts {
     hidePassword,
     requiredField,
     selectHint,
+    searchHint,
+    noResults,
+    useFreeText,
   );
 }

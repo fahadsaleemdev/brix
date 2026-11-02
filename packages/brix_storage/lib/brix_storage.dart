@@ -2,6 +2,7 @@
 /// store.
 library;
 
+export 'src/brix_offline_cache.dart';
 export 'src/brix_session_store.dart';
 export 'src/brix_storage.dart';
 export 'src/stores.dart';

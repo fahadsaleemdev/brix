@@ -13,6 +13,8 @@ class BrixUiIcons {
     this.hidePassword = const BrixIcon(Icons.visibility_off_outlined),
     this.selectChevron = const BrixIcon(Icons.unfold_more_rounded),
     this.selected = const BrixIcon(Icons.check_rounded),
+    this.search = const BrixIcon(Icons.search_rounded),
+    this.freeText = const BrixIcon(Icons.add_rounded),
   });
 
   /// `BrixDialog.warning`.
@@ -36,6 +38,12 @@ class BrixUiIcons {
   /// Next to the chosen option in a `BrixSelect` menu or sheet.
   final BrixIcon selected;
 
+  /// The search box of a searchable `BrixSelect` and `BrixSearchField`.
+  final BrixIcon search;
+
+  /// The "Use ..." row of `BrixSearchField`.
+  final BrixIcon freeText;
+
   BrixUiIcons copyWith({
     BrixIcon? warning,
     BrixIcon? error,
@@ -44,6 +52,8 @@ class BrixUiIcons {
     BrixIcon? hidePassword,
     BrixIcon? selectChevron,
     BrixIcon? selected,
+    BrixIcon? search,
+    BrixIcon? freeText,
   }) {
     return BrixUiIcons(
       warning: warning ?? this.warning,
@@ -53,6 +63,8 @@ class BrixUiIcons {
       hidePassword: hidePassword ?? this.hidePassword,
       selectChevron: selectChevron ?? this.selectChevron,
       selected: selected ?? this.selected,
+      search: search ?? this.search,
+      freeText: freeText ?? this.freeText,
     );
   }
 
@@ -65,7 +77,9 @@ class BrixUiIcons {
       other.showPassword == showPassword &&
       other.hidePassword == hidePassword &&
       other.selectChevron == selectChevron &&
-      other.selected == selected;
+      other.selected == selected &&
+      other.search == search &&
+      other.freeText == freeText;
 
   @override
   int get hashCode => Object.hash(
@@ -76,5 +90,7 @@ class BrixUiIcons {
     hidePassword,
     selectChevron,
     selected,
+    search,
+    freeText,
   );
 }

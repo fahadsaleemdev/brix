@@ -181,6 +181,34 @@ BrixSelect<String>(
 
 ![Select](doc/screenshots/select.png)
 
+## Search
+
+Two ways to search, for short and long lists.
+
+**A select with a search box.** `searchable: true` adds a search box on top of the options; the list narrows while typing. It always opens in a sheet.
+
+```dart
+BrixSelect<String>(label: 'Inverter model', searchable: true, options: models, onChanged: pick)
+```
+
+**`BrixSearchField`: type and pick.** A text field with suggestions under it. The options can be a list you have (filtered on the device) or come from your backend while typing:
+
+```dart
+BrixSearchField<Inverter>(
+  label: 'Inverter model',
+  search: (text) => repository.searchInverters(text), // or options: [...]
+  onSelected: (inverter) => setState(() => model = inverter),
+  onFreeText: (text) => setState(() => customModel = text),
+)
+```
+
+- The backend is asked only after typing stops (300 ms, `debounce`), a loader shows meanwhile, an older answer never replaces a newer one, and an error shows a short message instead of crashing.
+- With `onFreeText`, text that matches no option can be used too: a **Use "..."** row appears, or the user presses done. What your app shows next (extra fields, a note) is up to you; brix shows nothing more.
+- Required check, form validation, your own `controller`, `minLength` and the looks of the field (`fieldStyle`) and the list (`style`) work like the other widgets.
+- Works offline too when `search` reads through `BrixOfflineCache` from [brix_storage](https://pub.dev/packages/brix_storage): the backend when online, the saved copy when not.
+
+![Search](doc/screenshots/search.png)
+
 ## Toasts
 
 ```dart

@@ -7,6 +7,7 @@ import 'brix_select_data.dart';
 import 'brix_select_mode.dart';
 import 'brix_select_style.dart';
 import 'brix_sheet.dart';
+import 'brix_text_field.dart';
 import 'brix_text_field_style.dart';
 
 /// A dropdown that looks like a `BrixTextField`: label above, the chosen
@@ -45,6 +46,7 @@ class BrixSelect<T> extends StatefulWidget {
     this.errorText,
     this.enabled = true,
     this.mode = BrixSelectMode.auto,
+    this.searchable = false,
     this.sheetTitle,
     this.style,
     this.fieldStyle,
@@ -80,6 +82,10 @@ class BrixSelect<T> extends StatefulWidget {
   final bool enabled;
   final BrixSelectMode mode;
 
+  /// A search box on top of the options that narrows them while typing.
+  /// A searchable select always opens in a sheet.
+  final bool searchable;
+
   /// Title of the sheet. Default: [label].
   final String? sheetTitle;
 
@@ -114,11 +120,13 @@ class _BrixSelectState<T> extends State<BrixSelect<T>> {
     }
   }
 
-  bool get _useMenu => switch (widget.mode) {
-    BrixSelectMode.menu => true,
-    BrixSelectMode.sheet => false,
-    _ => widget.options.length <= 6,
-  };
+  bool get _useMenu =>
+      !widget.searchable &&
+      switch (widget.mode) {
+        BrixSelectMode.menu => true,
+        BrixSelectMode.sheet => false,
+        _ => widget.options.length <= 6,
+      };
 
   BrixOption<T>? _optionFor(T? value) {
     for (final option in widget.options) {
@@ -142,12 +150,24 @@ class _BrixSelectState<T> extends State<BrixSelect<T>> {
     final picked = await BrixSheet.show<_Picked<T>>(
       context: context,
       title: widget.sheetTitle ?? widget.label,
-      builder: (sheetContext) => _OptionList<T>(
-        options: widget.options,
-        selected: current,
-        style: context.brix.select.merge(widget.style),
-        onTap: (value) => BrixSheet.close(sheetContext, _Picked(value)),
-      ),
+      builder: (sheetContext) {
+        final style = context.brix.select.merge(widget.style);
+        void pick(T value) => BrixSheet.close(sheetContext, _Picked(value));
+        if (widget.searchable) {
+          return _SearchList<T>(
+            options: widget.options,
+            selected: current,
+            style: style,
+            onTap: pick,
+          );
+        }
+        return _OptionList<T>(
+          options: widget.options,
+          selected: current,
+          style: style,
+          onTap: pick,
+        );
+      },
     );
     if (picked != null && mounted) _pick(picked.value);
   }
@@ -367,6 +387,88 @@ class _OptionList<T> extends StatelessWidget {
           ),
         ],
       ],
+    );
+  }
+}
+
+/// A search box over the options; the list narrows while typing.
+class _SearchList<T> extends StatefulWidget {
+  const _SearchList({
+    required this.options,
+    required this.selected,
+    required this.style,
+    required this.onTap,
+  });
+
+  final List<BrixOption<T>> options;
+  final T? selected;
+  final BrixSelectStyle style;
+  final ValueChanged<T> onTap;
+
+  @override
+  State<_SearchList<T>> createState() => _SearchListState<T>();
+}
+
+class _SearchListState<T> extends State<_SearchList<T>> {
+  final _query = TextEditingController();
+
+  @override
+  void dispose() {
+    _query.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final brix = context.brix;
+    final text = _query.text.trim().toLowerCase();
+    final found = text.isEmpty
+        ? widget.options
+        : widget.options
+              .where((option) => option.label.toLowerCase().contains(text))
+              .toList();
+    return Padding(
+      // Keeps the list above the keyboard.
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          BrixTextField(
+            controller: _query,
+            hint: brix.texts.searchHint,
+            prefixIcon: brix.icons.search.build(
+              color: brix.colors.mutedText,
+              size: 20,
+            ),
+            textInputAction: TextInputAction.search,
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: 8),
+          if (found.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Text(
+                brix.texts.noResults,
+                textAlign: TextAlign.center,
+                style: brix.typography.body.copyWith(
+                  color: brix.colors.mutedText,
+                ),
+              ),
+            )
+          else
+            Flexible(
+              child: SingleChildScrollView(
+                child: _OptionList<T>(
+                  options: found,
+                  selected: widget.selected,
+                  style: widget.style,
+                  onTap: widget.onTap,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

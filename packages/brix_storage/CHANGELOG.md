@@ -1,3 +1,7 @@
+## Unreleased
+
+- New `BrixOfflineCache`: a list that also works offline. Backend answers are saved on the device and used when the backend cannot be reached (`fetch` for a whole list, `search` for searches), and `BrixCached.fromCache` says when the data is the saved copy.
+
 ## 1.0.1
 
 - Docs: the README tells the brix family story (new app: start with brix_cli; existing app: add the packages you need, each brings the core), with sharper screenshots and a clearer pub.dev description.

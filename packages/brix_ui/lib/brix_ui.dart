@@ -32,6 +32,7 @@ export 'src/widgets/brix_option.dart';
 export 'src/widgets/brix_select.dart';
 export 'src/widgets/brix_select_data.dart';
 export 'src/widgets/brix_select_mode.dart';
+export 'src/widgets/brix_search_field.dart';
 export 'src/widgets/brix_select_style.dart';
 export 'src/widgets/brix_sheet.dart';
 export 'src/widgets/brix_sheet_data.dart';
