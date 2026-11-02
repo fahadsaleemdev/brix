@@ -1,5 +1,6 @@
 ## Unreleased
 
+- New `BrixCard`: a surface for your own content with the theme's colour, corners, shadow and padding, an optional `accentColor` strip, and `onTap` with a press effect and a light tap feel. Change it with `BrixTheme(card: BrixCardStyle(...))`, a card's own `style`, or `cardBuilder`.
 - `BrixSelect(searchable: true)`: a search box on top of the options that narrows them while typing.
 - New `BrixSearchField`: a text field with suggestions under it, from a list or from your backend (waits for typing to stop, shows a loader, ignores old answers, never crashes on an error). With `onFreeText`, text that matches no option can be used too, and `initialValue` fills it with a saved value.
 - New texts `searchHint`, `noResults` and `useFreeText`, and icons `search` and `freeText`, all with defaults.

@@ -4,6 +4,8 @@ import '../widgets/brix_dialog_data.dart';
 import '../widgets/brix_dialog_style.dart';
 import '../widgets/brix_button_data.dart';
 import '../widgets/brix_button_style.dart';
+import '../widgets/brix_card_data.dart';
+import '../widgets/brix_card_style.dart';
 import '../widgets/brix_loader_data.dart';
 import '../widgets/brix_loader_style.dart';
 import '../widgets/brix_select_data.dart';
@@ -59,6 +61,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     this.sheetBuilder,
     this.select = const BrixSelectStyle(),
     this.selectBuilder,
+    this.card = const BrixCardStyle(),
+    this.cardBuilder,
   }) : brightness = Brightness.light,
        colors = colors ?? const BrixColors.light(),
        typography = typography ?? BrixTypography();
@@ -86,6 +90,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     this.sheetBuilder,
     this.select = const BrixSelectStyle(),
     this.selectBuilder,
+    this.card = const BrixCardStyle(),
+    this.cardBuilder,
   }) : brightness = Brightness.dark,
        colors = colors ?? const BrixColors.dark(),
        typography = typography ?? BrixTypography();
@@ -114,6 +120,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     required this.sheetBuilder,
     required this.select,
     required this.selectBuilder,
+    required this.card,
+    required this.cardBuilder,
   });
 
   /// Whether this is the light or the dark theme.
@@ -190,6 +198,13 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
   /// opening the options, the required check and the chosen value.
   final BrixSelectBuilder<Object?>? selectBuilder;
 
+  /// How every `BrixCard` looks; a card's own `style` goes on top.
+  final BrixCardStyle card;
+
+  /// Draws every `BrixCard` with the app's own widget; brix keeps the tap
+  /// and the pressed state. A card's own `builder` wins.
+  final BrixCardBuilder? cardBuilder;
+
   /// The theme set in the app, or, without one, the brix defaults for the
   /// app's current brightness, so widgets work with no setup.
   static BrixTheme of(BuildContext context) {
@@ -249,6 +264,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     BrixSheetBuilder? sheetBuilder,
     BrixSelectStyle? select,
     BrixSelectBuilder<Object?>? selectBuilder,
+    BrixCardStyle? card,
+    BrixCardBuilder? cardBuilder,
   }) {
     return BrixTheme._(
       brightness: brightness,
@@ -274,6 +291,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
       sheetBuilder: sheetBuilder ?? this.sheetBuilder,
       select: select ?? this.select,
       selectBuilder: selectBuilder ?? this.selectBuilder,
+      card: card ?? this.card,
+      cardBuilder: cardBuilder ?? this.cardBuilder,
     );
   }
 
@@ -304,6 +323,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
       sheetBuilder: t < 0.5 ? sheetBuilder : other.sheetBuilder,
       select: select.lerp(other.select, t),
       selectBuilder: t < 0.5 ? selectBuilder : other.selectBuilder,
+      card: card.lerp(other.card, t),
+      cardBuilder: t < 0.5 ? cardBuilder : other.cardBuilder,
     );
   }
 
@@ -332,7 +353,9 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
       other.sheet == sheet &&
       other.sheetBuilder == sheetBuilder &&
       other.select == select &&
-      other.selectBuilder == selectBuilder;
+      other.selectBuilder == selectBuilder &&
+      other.card == card &&
+      other.cardBuilder == cardBuilder;
 
   @override
   int get hashCode => Object.hashAll([
@@ -359,5 +382,7 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     sheetBuilder,
     select,
     selectBuilder,
+    card,
+    cardBuilder,
   ]);
 }

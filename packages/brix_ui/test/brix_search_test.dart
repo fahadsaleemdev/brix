@@ -4,10 +4,10 @@ import 'package:brix_ui/brix_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-const _inverters = [
-  BrixOption(value: 'sun5', label: 'SUN2000-5KTL'),
-  BrixOption(value: 'sun10', label: 'SUN2000-10KTL'),
-  BrixOption(value: 'sg10', label: 'SG 10 RT'),
+const _cities = [
+  BrixOption(value: 'lon', label: 'London'),
+  BrixOption(value: 'lis', label: 'Lisbon'),
+  BrixOption(value: 'par', label: 'Paris'),
 ];
 
 Future<void> _pump(WidgetTester tester, Widget child) async {
@@ -37,31 +37,31 @@ void main() {
       await _pump(
         tester,
         BrixSelect<String>(
-          label: 'Inverter',
+          label: 'City',
           searchable: true,
-          options: _inverters,
+          options: _cities,
           onChanged: (value) => chosen = value,
         ),
       );
       await tester.tap(find.byType(BrixSelect<String>));
       await tester.pumpAndSettle();
       expect(find.text('Search'), findsOneWidget);
-      expect(find.text('SG 10 RT'), findsOneWidget);
+      expect(find.text('Paris'), findsOneWidget);
 
-      await tester.enterText(find.byType(TextField).last, 'sun');
+      await tester.enterText(find.byType(TextField).last, 'l');
       await tester.pump();
-      expect(find.text('SG 10 RT'), findsNothing);
-      expect(find.text('SUN2000-10KTL'), findsOneWidget);
+      expect(find.text('Paris'), findsNothing);
+      expect(find.text('Lisbon'), findsOneWidget);
 
-      await tester.tap(find.text('SUN2000-10KTL'));
+      await tester.tap(find.text('Lisbon'));
       await tester.pumpAndSettle();
-      expect(chosen, 'sun10');
+      expect(chosen, 'lis');
     });
 
     testWidgets('shows No results when nothing matches', (tester) async {
       await _pump(
         tester,
-        BrixSelect<String>(searchable: true, options: _inverters),
+        BrixSelect<String>(searchable: true, options: _cities),
       );
       await tester.tap(find.byType(BrixSelect<String>));
       await tester.pumpAndSettle();
@@ -77,35 +77,35 @@ void main() {
       await _pump(
         tester,
         BrixSearchField<String>(
-          label: 'Model',
-          options: _inverters,
+          label: 'City',
+          options: _cities,
           onSelected: (value) => picked = value,
         ),
       );
-      await _type(tester, '10');
-      expect(find.text('SUN2000-10KTL'), findsOneWidget);
-      expect(find.text('SG 10 RT'), findsOneWidget);
-      expect(find.text('SUN2000-5KTL'), findsNothing);
+      await _type(tester, 'on');
+      expect(find.text('London'), findsOneWidget);
+      expect(find.text('Lisbon'), findsOneWidget);
+      expect(find.text('Paris'), findsNothing);
 
-      await tester.tap(find.text('SG 10 RT'));
+      await tester.tap(find.text('Lisbon'));
       await tester.pump();
-      expect(picked, 'sg10');
+      expect(picked, 'lis');
       expect(
         tester.widget<TextField>(find.byType(TextField)).controller!.text,
-        'SG 10 RT',
+        'Lisbon',
       );
-      expect(find.text('SUN2000-10KTL'), findsNothing); // list closed
+      expect(find.text('London'), findsNothing); // list closed
     });
 
     testWidgets('waits for minLength', (tester) async {
       await _pump(
         tester,
-        BrixSearchField<String>(options: _inverters, minLength: 3),
+        BrixSearchField<String>(options: _cities, minLength: 3),
       );
-      await _type(tester, 'su');
-      expect(find.text('SUN2000-5KTL'), findsNothing);
-      await _type(tester, 'sun');
-      expect(find.text('SUN2000-5KTL'), findsOneWidget);
+      await _type(tester, 'lo');
+      expect(find.text('London'), findsNothing);
+      await _type(tester, 'lon');
+      expect(find.text('London'), findsOneWidget);
     });
 
     testWidgets('offers the typed text when nothing matches', (tester) async {
@@ -113,16 +113,16 @@ void main() {
       await _pump(
         tester,
         BrixSearchField<String>(
-          options: _inverters,
+          options: _cities,
           onFreeText: (text) => free = text,
         ),
       );
-      await _type(tester, 'My Custom 7K');
-      expect(find.text('Use "My Custom 7K"'), findsOneWidget);
+      await _type(tester, 'Springfield');
+      expect(find.text('Use "Springfield"'), findsOneWidget);
       expect(find.text('No results'), findsNothing);
-      await tester.tap(find.text('Use "My Custom 7K"'));
+      await tester.tap(find.text('Use "Springfield"'));
       await tester.pump();
-      expect(free, 'My Custom 7K');
+      expect(free, 'Springfield');
     });
 
     testWidgets('no Use row for an exact match or without onFreeText', (
@@ -130,12 +130,12 @@ void main() {
     ) async {
       await _pump(
         tester,
-        BrixSearchField<String>(options: _inverters, onFreeText: (_) {}),
+        BrixSearchField<String>(options: _cities, onFreeText: (_) {}),
       );
-      await _type(tester, 'sg 10 rt');
+      await _type(tester, 'paris');
       expect(find.textContaining('Use "'), findsNothing);
 
-      await _pump(tester, BrixSearchField<String>(options: _inverters));
+      await _pump(tester, BrixSearchField<String>(options: _cities));
       await _type(tester, 'xyz');
       expect(find.textContaining('Use "'), findsNothing);
       expect(find.text('No results'), findsOneWidget);
@@ -149,20 +149,20 @@ void main() {
       await _pump(
         tester,
         BrixSearchField<String>(
-          options: _inverters,
+          options: _cities,
           onSelected: (value) => picked = value,
           onFreeText: (text) => free = text,
         ),
       );
-      await _type(tester, 'sg 10 rt');
+      await _type(tester, 'paris');
       await tester.testTextInput.receiveAction(TextInputAction.search);
       await tester.pump();
-      expect(picked, 'sg10');
+      expect(picked, 'par');
 
-      await _type(tester, 'Other 3K');
+      await _type(tester, 'Old Town');
       await tester.testTextInput.receiveAction(TextInputAction.search);
       await tester.pump();
-      expect(free, 'Other 3K');
+      expect(free, 'Old Town');
     });
 
     testWidgets('a required field checks that something is typed', (
@@ -170,7 +170,7 @@ void main() {
     ) async {
       await _pump(
         tester,
-        BrixSearchField<String>(options: _inverters, isRequired: true),
+        BrixSearchField<String>(options: _cities, isRequired: true),
       );
       final form = tester.state<FormState>(find.byType(Form));
       expect(form.validate(), isFalse);
@@ -183,15 +183,15 @@ void main() {
     tester,
   ) async {
     Widget field(String value) =>
-        BrixSearchField<String>(options: _inverters, initialValue: value);
-    await _pump(tester, field('SG 10 RT'));
+        BrixSearchField<String>(options: _cities, initialValue: value);
+    await _pump(tester, field('Paris'));
     TextEditingController text() =>
         tester.widget<TextField>(find.byType(TextField)).controller!;
-    expect(text().text, 'SG 10 RT');
-    await _pump(tester, field('SUN2000-5KTL'));
+    expect(text().text, 'Paris');
+    await _pump(tester, field('London'));
     await tester.pump();
-    expect(text().text, 'SUN2000-5KTL');
-    expect(find.text('SUN2000-10KTL'), findsNothing); // no list while idle
+    expect(text().text, 'London');
+    expect(find.text('Lisbon'), findsNothing); // no list while idle
   });
 
   group('BrixSearchField with a backend', () {
@@ -209,19 +209,19 @@ void main() {
           },
         ),
       );
-      await _type(tester, 's');
-      await _type(tester, 'su');
-      await _type(tester, 'sun');
+      await _type(tester, 'l');
+      await _type(tester, 'lo');
+      await _type(tester, 'lon');
       expect(find.byType(BrixLoader), findsOneWidget);
       expect(calls, isEmpty);
 
       await tester.pump(const Duration(milliseconds: 300));
-      expect(calls, ['sun']); // one call after typing stops
+      expect(calls, ['lon']); // one call after typing stops
 
-      answer.complete(_inverters.take(2).toList());
+      answer.complete(_cities.take(2).toList());
       await tester.pump();
       expect(find.byType(BrixLoader), findsNothing);
-      expect(find.text('SUN2000-5KTL'), findsOneWidget);
+      expect(find.text('London'), findsOneWidget);
     });
 
     testWidgets('an older answer never replaces a newer one', (tester) async {
@@ -232,17 +232,17 @@ void main() {
           search: (text) => (answers[text] = Completer()).future,
         ),
       );
-      await _type(tester, 'sun');
+      await _type(tester, 'lon');
       await tester.pump(const Duration(milliseconds: 300));
-      await _type(tester, 'sg');
+      await _type(tester, 'par');
       await tester.pump(const Duration(milliseconds: 300));
 
-      answers['sg']!.complete([_inverters[2]]);
+      answers['par']!.complete([_cities[2]]);
       await tester.pump();
-      answers['sun']!.complete(_inverters.take(2).toList());
+      answers['lon']!.complete(_cities.take(2).toList());
       await tester.pump();
-      expect(find.text('SG 10 RT'), findsOneWidget);
-      expect(find.text('SUN2000-5KTL'), findsNothing);
+      expect(find.text('Paris'), findsOneWidget);
+      expect(find.text('London'), findsNothing);
     });
 
     testWidgets('an error shows a short message, not a crash', (tester) async {
@@ -252,7 +252,7 @@ void main() {
           search: (_) async => throw StateError('offline'),
         ),
       );
-      await _type(tester, 'sun');
+      await _type(tester, 'lon');
       await tester.pump(const Duration(milliseconds: 300));
       await tester.pump();
       expect(find.text('Something went wrong'), findsOneWidget);

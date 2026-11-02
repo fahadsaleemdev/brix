@@ -26,6 +26,8 @@ dev_dependencies:
 screenshots:
   - description: "Search: a field with suggestions and a free value, and a select with a search box."
     path: doc/screenshots/search.png
+  - description: "Cards: plain, with a status accent, and one with its own style in dark."
+    path: doc/screenshots/card.png
   - description: "Text styles from large title to caption, in light and dark."
     path: doc/screenshots/text_scale.png
   - description: "One kit in three brands: default, own colours with round corners, a dark brand with sharp corners."
