@@ -14,8 +14,10 @@ import '../widgets/brix_text_field_data.dart';
 import '../widgets/brix_text_field_style.dart';
 import '../widgets/brix_toast_data.dart';
 import '../widgets/brix_toast_style.dart';
+import 'brix_breakpoints.dart';
 import 'brix_colors.dart';
 import 'brix_shape.dart';
+import 'brix_spacing.dart';
 import 'brix_typography.dart';
 import 'brix_ui_icons.dart';
 import 'brix_ui_texts.dart';
@@ -38,6 +40,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     BrixColors? colors,
     BrixTypography? typography,
     this.shape = const BrixShape(),
+    this.spacing = const BrixSpacing(),
+    this.breakpoints = const BrixBreakpoints(),
     this.glass = false,
     this.texts = const BrixUiTexts(),
     this.icons = const BrixUiIcons(),
@@ -63,6 +67,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     BrixColors? colors,
     BrixTypography? typography,
     this.shape = const BrixShape(),
+    this.spacing = const BrixSpacing(),
+    this.breakpoints = const BrixBreakpoints(),
     this.glass = false,
     this.texts = const BrixUiTexts(),
     this.icons = const BrixUiIcons(),
@@ -89,6 +95,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     required this.colors,
     required this.typography,
     required this.shape,
+    required this.spacing,
+    required this.breakpoints,
     required this.glass,
     required this.texts,
     required this.icons,
@@ -114,6 +122,13 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
   final BrixColors colors;
   final BrixTypography typography;
   final BrixShape shape;
+
+  /// Spacing steps, page padding per window size and the widest a column
+  /// of content grows.
+  final BrixSpacing spacing;
+
+  /// Where the window size classes start (`context.brixWindow`).
+  final BrixBreakpoints breakpoints;
 
   /// Frosted (blurred, see-through) dialogs and toasts instead of solid
   /// cards. Off by default: a solid card reads on any screen colour.
@@ -215,6 +230,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     BrixColors? colors,
     BrixTypography? typography,
     BrixShape? shape,
+    BrixSpacing? spacing,
+    BrixBreakpoints? breakpoints,
     bool? glass,
     BrixUiTexts? texts,
     BrixUiIcons? icons,
@@ -238,6 +255,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
       colors: colors ?? this.colors,
       typography: typography ?? this.typography,
       shape: shape ?? this.shape,
+      spacing: spacing ?? this.spacing,
+      breakpoints: breakpoints ?? this.breakpoints,
       glass: glass ?? this.glass,
       texts: texts ?? this.texts,
       icons: icons ?? this.icons,
@@ -266,6 +285,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
       colors: colors.lerp(other.colors, t),
       typography: typography.lerp(other.typography, t),
       shape: shape.lerp(other.shape, t),
+      spacing: spacing.lerp(other.spacing, t),
+      breakpoints: breakpoints.lerp(other.breakpoints, t),
       glass: t < 0.5 ? glass : other.glass,
       texts: t < 0.5 ? texts : other.texts,
       icons: t < 0.5 ? icons : other.icons,
@@ -293,6 +314,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
       other.colors == colors &&
       other.typography == typography &&
       other.shape == shape &&
+      other.spacing == spacing &&
+      other.breakpoints == breakpoints &&
       other.glass == glass &&
       other.texts == texts &&
       other.icons == icons &&
@@ -317,6 +340,8 @@ class BrixTheme extends ThemeExtension<BrixTheme> {
     colors,
     typography,
     shape,
+    spacing,
+    breakpoints,
     glass,
     texts,
     icons,

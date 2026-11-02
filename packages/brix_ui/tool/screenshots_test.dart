@@ -1035,4 +1035,43 @@ void main() {
       },
     );
   });
+
+  testWidgets('text scale', (tester) async {
+    Widget scale() => Builder(
+      builder: (context) {
+        final type = context.brix.typography;
+        final color = context.brix.colors.text;
+        final rows = <(String, TextStyle)>[
+          ('Large title', type.largeTitle),
+          ('Title 1', type.title1),
+          ('Title 2', type.title2),
+          ('Title 3', type.title3),
+          ('Headline', type.headline),
+          ('Body', type.body),
+          ('Callout', type.callout),
+          ('Subheadline', type.subheadline),
+          ('Footnote', type.footnote),
+          ('Caption', type.caption),
+          ('Caption 2', type.caption2),
+        ];
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(24, 36, 24, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final (name, style) in rows)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(name, style: style.copyWith(color: color)),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+    await _shoot(tester, 'text_scale', [
+      _screen(_light, 'context.brix.typography', scale()),
+      _screen(_dark, 'Same styles, dark', scale()),
+    ]);
+  });
 }

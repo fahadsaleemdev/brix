@@ -1,3 +1,8 @@
+## Unreleased
+
+- New text styles: `largeTitle`, `title1`, `title2`, `title3`, `headline`, `callout`, `subheadline`, `footnote` and `caption2`, next to the existing ones, all with iOS sizes and your `fontFamily`. Nothing you use changes size.
+- Responsive the Flutter way: `context.brixWindow` gives the window size class (`BrixWindowSize`: compact, medium, expanded, large, extraLarge) from `BrixBreakpoints` in the theme, `BrixSpacing` holds the spacing steps and the page padding per size, and the new `BrixContent` keeps a column of content readable on every window.
+
 ## 1.1.1
 
 - Docs: the README tells the brix family story (new app: start with brix_cli; existing app: add the packages you need, each brings the core), with sharper screenshots and a clearer pub.dev description.

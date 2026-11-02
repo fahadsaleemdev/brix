@@ -3,14 +3,18 @@ library;
 
 export 'src/feedback/brix_ui_feedback.dart';
 export 'src/overlay/brix_ui.dart';
+export 'src/theme/brix_breakpoints.dart';
 export 'src/theme/brix_colors.dart';
 export 'src/theme/brix_icon.dart';
 export 'src/theme/brix_shape.dart';
+export 'src/theme/brix_spacing.dart';
 export 'src/theme/brix_theme.dart';
 export 'src/theme/brix_theme_context.dart';
 export 'src/theme/brix_typography.dart';
 export 'src/theme/brix_ui_icons.dart';
 export 'src/theme/brix_ui_texts.dart';
+export 'src/theme/brix_window_size.dart';
+export 'src/widgets/brix_content.dart';
 export 'src/widgets/brix_dialog.dart';
 export 'src/widgets/brix_dialog_button.dart';
 export 'src/widgets/brix_dialog_data.dart';
