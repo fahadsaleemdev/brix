@@ -24,6 +24,10 @@ dev_dependencies:
     sdk: flutter
 
 screenshots:
+  - description: "Search: a field with suggestions and a free value, and a select with a search box."
+    path: doc/screenshots/search.png
+  - description: "Text styles from large title to caption, in light and dark."
+    path: doc/screenshots/text_scale.png
   - description: "One kit in three brands: default, own colours with round corners, a dark brand with sharp corners."
     path: doc/screenshots/your_brand.png
   - description: "Buttons: filled, gradient, outlined, destructive, loading and disabled."

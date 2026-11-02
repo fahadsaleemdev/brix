@@ -1035,4 +1035,94 @@ void main() {
       },
     );
   });
+
+  testWidgets('text scale', (tester) async {
+    Widget scale() => Builder(
+      builder: (context) {
+        final type = context.brix.typography;
+        final color = context.brix.colors.text;
+        final rows = <(String, TextStyle)>[
+          ('Large title', type.largeTitle),
+          ('Title 1', type.title1),
+          ('Title 2', type.title2),
+          ('Title 3', type.title3),
+          ('Headline', type.headline),
+          ('Body', type.body),
+          ('Callout', type.callout),
+          ('Subheadline', type.subheadline),
+          ('Footnote', type.footnote),
+          ('Caption', type.caption),
+          ('Caption 2', type.caption2),
+        ];
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(24, 36, 24, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (final (name, style) in rows)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(name, style: style.copyWith(color: color)),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+    await _shoot(tester, 'text_scale', [
+      _screen(_light, 'context.brix.typography', scale()),
+      _screen(_dark, 'Same styles, dark', scale()),
+    ]);
+  });
+
+  testWidgets('search', (tester) async {
+    const models = [
+      BrixOption(value: 'sun5', label: 'SUN2000-5KTL-M1'),
+      BrixOption(value: 'sun10', label: 'SUN2000-10KTL-M1'),
+      BrixOption(value: 'sun20', label: 'SUN2000-20KTL-M5'),
+      BrixOption(value: 'sg10', label: 'SG 10 RT'),
+      BrixOption(value: 'gw5', label: 'GW5000-SDT-20'),
+      BrixOption(value: 'fox5', label: 'Fox G3 T5'),
+    ];
+    Widget page(Widget field) => Padding(
+      padding: const EdgeInsets.fromLTRB(24, 40, 24, 24),
+      child: Column(children: [field]),
+    );
+    await _shoot(
+      tester,
+      'search',
+      [
+        _screen(
+          _light,
+          'BrixSearchField, with a free value',
+          page(
+            BrixSearchField<String>(
+              label: 'Inverter model',
+              options: models,
+              onFreeText: (_) {},
+            ),
+          ),
+        ),
+        _screen(
+          _dark,
+          'BrixSelect(searchable: true), dark',
+          page(
+            BrixSelect<String>(
+              label: 'Inverter model',
+              searchable: true,
+              options: models,
+            ),
+          ),
+        ),
+      ],
+      prepare: () async {
+        await tester.tap(find.byType(BrixSelect<String>));
+        await tester.pumpAndSettle();
+        await tester.enterText(find.byType(TextField).last, 'sun');
+        await tester.pump();
+        await tester.enterText(find.byType(TextField).first, 'SUN2000');
+        await tester.pump();
+      },
+    );
+  });
 }

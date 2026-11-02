@@ -73,6 +73,37 @@ BrixSessionStore<User>(
 );
 ```
 
+### Offline copy of a list
+
+`BrixOfflineCache` saves every answer of your backend on the device. When the backend cannot be reached (no connection or a server error), the saved copy is used, and the result says so, e.g. to show "Offline, saved data".
+
+```dart
+final inverters = BrixOfflineCache<Inverter>(
+  storage: storage,
+  key: 'catalog.inverters',
+  idOf: (inverter) => inverter.id,
+  toJson: (inverter) => inverter.toJson(),
+  fromJson: Inverter.fromJson,
+);
+
+// The whole list (replaces the saved copy):
+final all = await inverters.fetch(() => api.getInverters());
+
+// A search: the backend when online, the saved copy when offline.
+final found = await inverters.search(
+  text,
+  online: () => api.searchInverters(text),
+  matches: (inverter, text) => inverter.name.toLowerCase().contains(text),
+);
+
+switch (found) {
+  case Success(:final data): show(data.data, offline: data.fromCache);
+  case Failed(:final failure): showError(failure.displayMessage);
+}
+```
+
+Search answers are merged into the copy (by `idOf`, newest kept, at most `maxItems`). A rejected request is never replaced by old data. Pair it with `BrixSearchField` from brix_ui for a search box that also works offline.
+
 ### Other backends
 
 `ValueStore` and `SecretStore` are small interfaces: plug in Hive, a file, or `MemoryStore` in tests:

@@ -80,9 +80,9 @@ flowchart TB
 - **Account:** login, signup, email codes with a resend timer, remember me, live password rules, forgot and reset password, change password.
 - **Profile:** profile, avatar upload, delete account, app start and logout.
 - **Network:** API calls, retries and timeouts, uploads, downloads, cancelling a call, backend messages and field errors, a readable log with secrets hidden.
-- **Storage:** tokens in the Keychain or Keystore, settings, safe after a reinstall or a broken keystore.
-- **UI:** buttons, text fields, code boxes, select, sheets, dialogs, toasts, a loader and panels.
-- **Design:** one theme for colours, fonts, shapes, texts and icons, in light and dark, changed in one place or widget by widget.
+- **Storage:** tokens in the Keychain or Keystore, settings, safe after a reinstall or a broken keystore, and an offline copy of any list (`BrixOfflineCache`).
+- **UI:** buttons, text fields, code boxes, select (with search), a search field with suggestions and free values, sheets, dialogs, toasts, a loader and `BrixContent` for readable columns.
+- **Design:** one theme for colours, a full text scale (large title to caption), shapes, spacing, texts and icons, in light and dark, changed in one place or widget by widget. Window size classes for responsive layouts, the Flutter way.
 - **Setup:** a new app in one command, a test backend for debug builds, the app id on every platform, and fakes for your tests.
 
 ## Screenshots
@@ -137,6 +137,16 @@ You write a few small classes once: your user, the class for your API and your n
 - The screenshots are made from the real widgets on an iPhone frame, not drawn by hand.
 - MIT licensed.
 
+## Versioning
+
+Updating brix never breaks your app.
+
+- New options always come with a default, so your code keeps compiling.
+- A renamed class, method or option keeps its old name marked `@Deprecated`. Your IDE shows it crossed out with a hint to the new name, and it keeps working until the next major version.
+- Breaking changes only come in a new major version (2.0.0, 3.0.0), with the steps in the CHANGELOG.
+- On every push, CI compares the public API of each package with its latest release on pub.dev and fails if anything an app may use was removed or changed.
+- Classes such as `Failure` are made to be extended (`extends`), not implemented. New members may be added to them with a default.
+
 ## Working on brix
 
 ```
@@ -145,5 +155,13 @@ cd brix/packages/brix && dart pub get && dart test
 ```
 
 Each package has its own `dart test` or `flutter test`. A `pubspec_overrides.yaml` in each package points it at the others in this repo, so they are built together.
+
+Before a release, run everything CI checks in one command: formatting, analysis and tests of every package, the example apps, the brix_cli template, a fresh app made with `brix create` and the public API check.
+
+```
+tool/release_check.sh
+```
+
+`tool/api_check.sh` runs the public API check on its own (`tool/api_check.sh brix_ui` for one package).
 
 Questions and ideas are welcome in the [issues](https://github.com/mrubaz/brix/issues).

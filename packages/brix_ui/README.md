@@ -181,6 +181,34 @@ BrixSelect<String>(
 
 ![Select](doc/screenshots/select.png)
 
+## Search
+
+Two ways to search, for short and long lists.
+
+**A select with a search box.** `searchable: true` adds a search box on top of the options; the list narrows while typing. It always opens in a sheet.
+
+```dart
+BrixSelect<String>(label: 'Inverter model', searchable: true, options: models, onChanged: pick)
+```
+
+**`BrixSearchField`: type and pick.** A text field with suggestions under it. The options can be a list you have (filtered on the device) or come from your backend while typing:
+
+```dart
+BrixSearchField<Inverter>(
+  label: 'Inverter model',
+  search: (text) => repository.searchInverters(text), // or options: [...]
+  onSelected: (inverter) => setState(() => model = inverter),
+  onFreeText: (text) => setState(() => customModel = text),
+)
+```
+
+- The backend is asked only after typing stops (300 ms, `debounce`), a loader shows meanwhile, an older answer never replaces a newer one, and an error shows a short message instead of crashing.
+- With `onFreeText`, text that matches no option can be used too: a **Use "..."** row appears, or the user presses done. What your app shows next (extra fields, a note) is up to you; brix shows nothing more.
+- `initialValue` fills the field with a saved value (or pass your own `controller`). Required check, form validation, `minLength` and the looks of the field (`fieldStyle`) and the list (`style`) work like the other widgets.
+- Works offline too when `search` reads through `BrixOfflineCache` from [brix_storage](https://pub.dev/packages/brix_storage): the backend when online, the saved copy when not.
+
+![Search](doc/screenshots/search.png)
+
 ## Toasts
 
 ```dart
@@ -191,6 +219,49 @@ BrixToast.success('We sent a code to ada@brix.dev', title: 'Check your email');
 Slides in at the top, hides after 3 seconds (or on tap / swipe up), never blocks the screen, and screen readers announce it.
 
 ![Toasts](doc/screenshots/toast.png)
+
+## Text styles
+
+Every style your screens need, iOS sizes, from one theme. Colours come from the theme too, so they work in light and dark. Text grows with the user's text size setting, never with the screen width.
+
+```dart
+Text('Welcome', style: context.brix.typography.largeTitle)
+Text('3 new inspections', style: context.brix.typography.headline)
+```
+
+| Style | Size | Use |
+|---|---|---|
+| `largeTitle` | 34 | the big title of a screen |
+| `title1`, `title2`, `title3` | 28, 22, 20 | headings (`title3` follows `title`) |
+| `headline` | 17, semibold | the main line of a row or card |
+| `body`, `callout` | 16 | running text, notes |
+| `subheadline` | 15 | the second line of a row |
+| `footnote` | 13 | small print |
+| `caption`, `caption2` | 12, 11 | hints, time stamps |
+| `label`, `button` | 14, 16 | field labels and button text |
+
+Change the font of all of them with `BrixTypography(fontFamily: 'Inter')`, or any one style: `BrixTypography(headline: GoogleFonts.poppins(fontSize: 18))`.
+
+![Text styles](doc/screenshots/text_scale.png)
+
+## Responsive
+
+brix follows Flutter's adaptive layout advice: decide the layout from the room the window has, keep content readable, and never scale fonts with the screen.
+
+```dart
+final window = context.brixWindow;   // compact, medium, expanded, large, extraLarge
+if (window.isCompact) return const OnePane();
+return const TwoPanes();
+```
+
+- **Window size classes** are the Material 3 ones: compact under 600, medium from 600, expanded from 840, large from 1200, extra large from 1600. Change them with `BrixBreakpoints(medium: 700)` in the theme.
+- **`BrixContent`** keeps a form or a list readable: centred, at most 640 wide, with the page padding of the window (16 on phones, 24 on medium, 32 on wider windows).
+
+```dart
+Scaffold(body: BrixContent(child: LoginForm()))
+```
+
+- **Spacing steps** keep screens in line: `context.brix.spacing.s` (8), `m` (12), `l` (16), `xl` (24) and more, changed in one place with `BrixSpacing(...)`.
 
 ## Make it yours
 
