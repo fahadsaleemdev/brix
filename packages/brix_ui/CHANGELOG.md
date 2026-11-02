@@ -1,4 +1,4 @@
-## Unreleased
+## 1.2.0
 
 - New `BrixCard`: a surface for your own content with the theme's colour, corners, shadow and padding, an optional `accentColor` strip, and `onTap` with a press effect and a light tap feel. Change it with `BrixTheme(card: BrixCardStyle(...))`, a card's own `style`, or `cardBuilder`.
 - `BrixSelect(searchable: true)`: a search box on top of the options that narrows them while typing.
