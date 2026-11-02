@@ -10,7 +10,7 @@
 
 > Part of the [brix](https://github.com/mrubaz/brix) family. Starting a new app? `brix create my_app` from [brix_cli](https://pub.dev/packages/brix_cli) sets this package up for you. Adding it to an app you already have? It brings the core, [brix](https://pub.dev/packages/brix), with it.
 
-Buttons, text fields, a select, dialogs, sheets, toasts and a loader that look like your app. They take every colour, font and size from one theme, so switching to dark mode changes nothing in your screens.
+Buttons, text fields, a select, cards, dialogs, sheets, toasts and a loader that look like your app. They take every colour, font and size from one theme, so switching to dark mode changes nothing in your screens.
 
 ![One kit in three brands](doc/screenshots/your_brand.png)
 
@@ -188,17 +188,17 @@ Two ways to search, for short and long lists.
 **A select with a search box.** `searchable: true` adds a search box on top of the options; the list narrows while typing. It always opens in a sheet.
 
 ```dart
-BrixSelect<String>(label: 'Inverter model', searchable: true, options: models, onChanged: pick)
+BrixSelect<String>(label: 'Country', searchable: true, options: countries, onChanged: pick)
 ```
 
 **`BrixSearchField`: type and pick.** A text field with suggestions under it. The options can be a list you have (filtered on the device) or come from your backend while typing:
 
 ```dart
-BrixSearchField<Inverter>(
-  label: 'Inverter model',
-  search: (text) => repository.searchInverters(text), // or options: [...]
-  onSelected: (inverter) => setState(() => model = inverter),
-  onFreeText: (text) => setState(() => customModel = text),
+BrixSearchField<City>(
+  label: 'City',
+  search: (text) => repository.searchCities(text), // or options: [...]
+  onSelected: (city) => setState(() => this.city = city),
+  onFreeText: (text) => setState(() => cityName = text),
 )
 ```
 
@@ -208,6 +208,26 @@ BrixSearchField<Inverter>(
 - Works offline too when `search` reads through `BrixOfflineCache` from [brix_storage](https://pub.dev/packages/brix_storage): the backend when online, the saved copy when not.
 
 ![Search](doc/screenshots/search.png)
+
+## Cards
+
+A surface for your own content: the theme's colour, corners, a soft shadow and padding. What goes inside is yours.
+
+```dart
+BrixCard(child: Text('3 new orders today'))
+
+BrixCard(
+  accentColor: context.brix.colors.success, // a strip on the leading edge, e.g. a status
+  onTap: () => open(order),                 // shrinks a little while held, light tap feel
+  child: OrderSummary(order),
+)
+```
+
+- Like Flutter's `Card` it is as wide as its content. In a `ListView` or a `Column(crossAxisAlignment: CrossAxisAlignment.stretch)` it takes the full width.
+- A tappable card is a button for screen readers; `semanticLabel` gives it one short label.
+- Four levels to change it: the theme colours and `shape.radius`, every card with `BrixTheme(card: BrixCardStyle(...))`, one card with `style:`, or a completely own card with `cardBuilder` (brix keeps the tap and the pressed state).
+
+![Cards](doc/screenshots/card.png)
 
 ## Toasts
 
@@ -226,7 +246,7 @@ Every style your screens need, iOS sizes, from one theme. Colours come from the 
 
 ```dart
 Text('Welcome', style: context.brix.typography.largeTitle)
-Text('3 new inspections', style: context.brix.typography.headline)
+Text('3 new orders', style: context.brix.typography.headline)
 ```
 
 | Style | Size | Use |
@@ -285,6 +305,7 @@ Everything has a default. Change only what you need.
 | A completely own toast | `toastBuilder: (context, toast) => MyToast(...)`, brix keeps the timer and swiping |
 | Sheets | `BrixSheetStyle(radius: 16, showGrabber: false, backgroundColor: ...)`, or `sheetBuilder: (context, sheet) => MySheet(...)` |
 | Select menus and sheets | `BrixSelectStyle(menuRadius: 14, selectedColor: ...)`, or `selectBuilder: (context, select) => MyPicker(...)`; the field follows your text field style |
+| Cards | `BrixCardStyle(radius: 20, padding: ..., shadow: [], borderWidth: 0, accentWidth: 6, pressedScale: 1, haptics: false)`, or `cardBuilder: (context, card) => MyCard(...)`, brix keeps the tap and the pressed state |
 | Spinner | `BrixLoaderStyle(radius: 14, color: ...)`, or `loaderBuilder: (context, loader) => MySpinner(...)`, loading buttons use it too |
 | Button animation speed | `BrixButtonStyle(pressDuration: ..., fadeDuration: ...)` |
 | Required marker and errors | `BrixTextFieldStyle(requiredMarker: ' (required)', requiredMarkerStyle: ..., errorStyle: ..., errorMaxLines: 2)` |

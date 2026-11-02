@@ -1076,13 +1076,13 @@ void main() {
   });
 
   testWidgets('search', (tester) async {
-    const models = [
-      BrixOption(value: 'sun5', label: 'SUN2000-5KTL-M1'),
-      BrixOption(value: 'sun10', label: 'SUN2000-10KTL-M1'),
-      BrixOption(value: 'sun20', label: 'SUN2000-20KTL-M5'),
-      BrixOption(value: 'sg10', label: 'SG 10 RT'),
-      BrixOption(value: 'gw5', label: 'GW5000-SDT-20'),
-      BrixOption(value: 'fox5', label: 'Fox G3 T5'),
+    const countries = [
+      BrixOption(value: 'gb', label: 'United Kingdom'),
+      BrixOption(value: 'us', label: 'United States'),
+      BrixOption(value: 'ae', label: 'United Arab Emirates'),
+      BrixOption(value: 'pk', label: 'Pakistan'),
+      BrixOption(value: 'de', label: 'Germany'),
+      BrixOption(value: 'jp', label: 'Japan'),
     ];
     Widget page(Widget field) => Padding(
       padding: const EdgeInsets.fromLTRB(24, 40, 24, 24),
@@ -1097,8 +1097,8 @@ void main() {
           'BrixSearchField, with a free value',
           page(
             BrixSearchField<String>(
-              label: 'Inverter model',
-              options: models,
+              label: 'Country',
+              options: countries,
               onFreeText: (_) {},
             ),
           ),
@@ -1108,9 +1108,9 @@ void main() {
           'BrixSelect(searchable: true), dark',
           page(
             BrixSelect<String>(
-              label: 'Inverter model',
+              label: 'Country',
               searchable: true,
-              options: models,
+              options: countries,
             ),
           ),
         ),
@@ -1118,11 +1118,74 @@ void main() {
       prepare: () async {
         await tester.tap(find.byType(BrixSelect<String>));
         await tester.pumpAndSettle();
-        await tester.enterText(find.byType(TextField).last, 'sun');
+        await tester.enterText(find.byType(TextField).last, 'uni');
         await tester.pump();
-        await tester.enterText(find.byType(TextField).first, 'SUN2000');
+        await tester.enterText(find.byType(TextField).first, 'United');
         await tester.pump();
       },
     );
+  });
+
+  testWidgets('card', (tester) async {
+    Widget cards({bool own = false}) => Builder(
+      builder: (context) {
+        final brix = context.brix;
+        final type = brix.typography;
+        Widget order(String title, String note) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: type.headline.copyWith(color: brix.colors.text)),
+            const SizedBox(height: 4),
+            Text(
+              note,
+              style: type.subheadline.copyWith(color: brix.colors.mutedText),
+            ),
+          ],
+        );
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(24, 36, 24, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              BrixCard(
+                onTap: () {},
+                child: order('Order 1042', '3 items, delivered today'),
+              ),
+              const SizedBox(height: 16),
+              BrixCard(
+                onTap: () {},
+                accentColor: brix.colors.success,
+                child: order('Order 1041', 'Paid'),
+              ),
+              const SizedBox(height: 16),
+              BrixCard(
+                onTap: () {},
+                accentColor: brix.colors.warning,
+                child: order('Order 1040', 'Waiting for payment'),
+              ),
+              const SizedBox(height: 16),
+              BrixCard(
+                style: own
+                    ? const BrixCardStyle(radius: 24, borderWidth: 0)
+                    : null,
+                child: Row(
+                  children: [
+                    Expanded(child: order('This week', '12 orders')),
+                    Text(
+                      '£840',
+                      style: type.title2.copyWith(color: brix.colors.primary),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    await _shoot(tester, 'card', [
+      _screen(_light, 'BrixCard, with an accent', cards()),
+      _screen(_dark, 'Dark, one card with its own style', cards(own: true)),
+    ]);
   });
 }

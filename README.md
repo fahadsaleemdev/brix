@@ -81,7 +81,7 @@ flowchart TB
 - **Profile:** profile, avatar upload, delete account, app start and logout.
 - **Network:** API calls, retries and timeouts, uploads, downloads, cancelling a call, backend messages and field errors, a readable log with secrets hidden.
 - **Storage:** tokens in the Keychain or Keystore, settings, safe after a reinstall or a broken keystore, and an offline copy of any list (`BrixOfflineCache`).
-- **UI:** buttons, text fields, code boxes, select (with search), a search field with suggestions and free values, sheets, dialogs, toasts, a loader and `BrixContent` for readable columns.
+- **UI:** buttons, text fields, code boxes, select (with search), a search field with suggestions and free values, cards, sheets, dialogs, toasts, a loader and `BrixContent` for readable columns.
 - **Design:** one theme for colours, a full text scale (large title to caption), shapes, spacing, texts and icons, in light and dark, changed in one place or widget by widget. Window size classes for responsive layouts, the Flutter way.
 - **Setup:** a new app in one command, a test backend for debug builds, the app id on every platform, and fakes for your tests.
 

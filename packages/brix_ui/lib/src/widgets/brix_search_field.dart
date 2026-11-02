@@ -15,11 +15,11 @@ import 'brix_text_field_style.dart';
 /// works offline).
 ///
 /// ```dart
-/// BrixSearchField<Inverter>(
-///   label: 'Inverter model',
-///   search: (text) => repository.searchInverters(text),
-///   onSelected: (inverter) => setState(() => model = inverter),
-///   onFreeText: (text) => setState(() => customModel = text),
+/// BrixSearchField<City>(
+///   label: 'City',
+///   search: (text) => repository.searchCities(text),
+///   onSelected: (city) => setState(() => this.city = city),
+///   onFreeText: (text) => setState(() => cityName = text),
 /// )
 /// ```
 ///

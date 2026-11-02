@@ -78,22 +78,22 @@ BrixSessionStore<User>(
 `BrixOfflineCache` saves every answer of your backend on the device. When the backend cannot be reached (no connection or a server error), the saved copy is used, and the result says so, e.g. to show "Offline, saved data".
 
 ```dart
-final inverters = BrixOfflineCache<Inverter>(
+final products = BrixOfflineCache<Product>(
   storage: storage,
-  key: 'catalog.inverters',
-  idOf: (inverter) => inverter.id,
-  toJson: (inverter) => inverter.toJson(),
-  fromJson: Inverter.fromJson,
+  key: 'catalog.products',
+  idOf: (product) => product.id,
+  toJson: (product) => product.toJson(),
+  fromJson: Product.fromJson,
 );
 
 // The whole list (replaces the saved copy):
-final all = await inverters.fetch(() => api.getInverters());
+final all = await products.fetch(() => api.getProducts());
 
 // A search: the backend when online, the saved copy when offline.
-final found = await inverters.search(
+final found = await products.search(
   text,
-  online: () => api.searchInverters(text),
-  matches: (inverter, text) => inverter.name.toLowerCase().contains(text),
+  online: () => api.searchProducts(text),
+  matches: (product, text) => product.name.toLowerCase().contains(text),
 );
 
 switch (found) {
