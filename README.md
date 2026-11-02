@@ -137,6 +137,16 @@ You write a few small classes once: your user, the class for your API and your n
 - The screenshots are made from the real widgets on an iPhone frame, not drawn by hand.
 - MIT licensed.
 
+## Versioning
+
+Updating brix never breaks your app.
+
+- New options always come with a default, so your code keeps compiling.
+- A renamed class, method or option keeps its old name marked `@Deprecated`. Your IDE shows it crossed out with a hint to the new name, and it keeps working until the next major version.
+- Breaking changes only come in a new major version (2.0.0, 3.0.0), with the steps in the CHANGELOG.
+- On every push, CI compares the public API of each package with its latest release on pub.dev and fails if anything an app may use was removed or changed.
+- Classes such as `Failure` are made to be extended (`extends`), not implemented. New members may be added to them with a default.
+
 ## Working on brix
 
 ```
@@ -145,5 +155,13 @@ cd brix/packages/brix && dart pub get && dart test
 ```
 
 Each package has its own `dart test` or `flutter test`. A `pubspec_overrides.yaml` in each package points it at the others in this repo, so they are built together.
+
+Before a release, run everything CI checks in one command: formatting, analysis and tests of every package, the example apps, the brix_cli template, a fresh app made with `brix create` and the public API check.
+
+```
+tool/release_check.sh
+```
+
+`tool/api_check.sh` runs the public API check on its own (`tool/api_check.sh brix_ui` for one package).
 
 Questions and ideas are welcome in the [issues](https://github.com/mrubaz/brix/issues).

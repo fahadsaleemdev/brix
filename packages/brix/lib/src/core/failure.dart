@@ -6,6 +6,9 @@ import 'dart:async';
 ///
 /// Open for extension: a block or an app may add its own subclasses. A
 /// `switch` over failures should therefore end with a `Failure()` case.
+///
+/// Extend it, do not implement it: new members may be added here with a
+/// default, which only an `implements Failure` class would have to add.
 abstract class Failure {
   Failure({
     Iterable<String> messages = const [],
