@@ -1,7 +1,7 @@
 ## Unreleased
 
 - `BrixSelect(searchable: true)`: a search box on top of the options that narrows them while typing.
-- New `BrixSearchField`: a text field with suggestions under it, from a list or from your backend (waits for typing to stop, shows a loader, ignores old answers, never crashes on an error). With `onFreeText`, text that matches no option can be used too.
+- New `BrixSearchField`: a text field with suggestions under it, from a list or from your backend (waits for typing to stop, shows a loader, ignores old answers, never crashes on an error). With `onFreeText`, text that matches no option can be used too, and `initialValue` fills it with a saved value.
 - New texts `searchHint`, `noResults` and `useFreeText`, and icons `search` and `freeText`, all with defaults.
 - New text styles: `largeTitle`, `title1`, `title2`, `title3`, `headline`, `callout`, `subheadline`, `footnote` and `caption2`, next to the existing ones, all with iOS sizes and your `fontFamily`. Nothing you use changes size.
 - Responsive the Flutter way: `context.brixWindow` gives the window size class (`BrixWindowSize`: compact, medium, expanded, large, extraLarge) from `BrixBreakpoints` in the theme, `BrixSpacing` holds the spacing steps and the page padding per size, and the new `BrixContent` keeps a column of content readable on every window.

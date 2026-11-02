@@ -204,7 +204,7 @@ BrixSearchField<Inverter>(
 
 - The backend is asked only after typing stops (300 ms, `debounce`), a loader shows meanwhile, an older answer never replaces a newer one, and an error shows a short message instead of crashing.
 - With `onFreeText`, text that matches no option can be used too: a **Use "..."** row appears, or the user presses done. What your app shows next (extra fields, a note) is up to you; brix shows nothing more.
-- Required check, form validation, your own `controller`, `minLength` and the looks of the field (`fieldStyle`) and the list (`style`) work like the other widgets.
+- `initialValue` fills the field with a saved value (or pass your own `controller`). Required check, form validation, `minLength` and the looks of the field (`fieldStyle`) and the list (`style`) work like the other widgets.
 - Works offline too when `search` reads through `BrixOfflineCache` from [brix_storage](https://pub.dev/packages/brix_storage): the backend when online, the saved copy when not.
 
 ![Search](doc/screenshots/search.png)

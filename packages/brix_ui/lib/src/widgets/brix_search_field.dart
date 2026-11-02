@@ -34,6 +34,7 @@ class BrixSearchField<T> extends StatefulWidget {
     this.onSelected,
     this.onFreeText,
     this.controller,
+    this.initialValue,
     this.focusNode,
     this.label,
     this.hint,
@@ -69,6 +70,11 @@ class BrixSearchField<T> extends StatefulWidget {
 
   /// The typed text. Give one to set a starting text or read it later.
   final TextEditingController? controller;
+
+  /// The starting text when no [controller] is given, e.g. a value saved
+  /// earlier. Rebuilding with a new value replaces the text while the field
+  /// is not being edited.
+  final String? initialValue;
 
   final FocusNode? focusNode;
 
@@ -124,7 +130,8 @@ class _BrixSearchFieldState<T> extends State<BrixSearchField<T>> {
   double _width = 0;
 
   TextEditingController get _controller =>
-      widget.controller ?? (_ownController ??= TextEditingController());
+      widget.controller ??
+      (_ownController ??= TextEditingController(text: widget.initialValue));
   FocusNode get _focus => widget.focusNode ?? (_ownFocus ??= FocusNode());
   String get _text => _controller.text.trim();
 
@@ -137,6 +144,17 @@ class _BrixSearchFieldState<T> extends State<BrixSearchField<T>> {
   @override
   void didUpdateWidget(BrixSearchField<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    final text = widget.initialValue;
+    if (widget.controller == null &&
+        text != oldWidget.initialValue &&
+        text != null) {
+      // The field shows the app's new value from the next frame on.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !_focus.hasFocus && _controller.text != text) {
+          _controller.text = text;
+        }
+      });
+    }
     if (oldWidget.focusNode != widget.focusNode) {
       (oldWidget.focusNode ?? _ownFocus)?.removeListener(_focusChanged);
       _focus.addListener(_focusChanged);

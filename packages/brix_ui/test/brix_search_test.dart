@@ -179,6 +179,21 @@ void main() {
     });
   });
 
+  testWidgets('initialValue fills the field and follows a new value', (
+    tester,
+  ) async {
+    Widget field(String value) =>
+        BrixSearchField<String>(options: _inverters, initialValue: value);
+    await _pump(tester, field('SG 10 RT'));
+    TextEditingController text() =>
+        tester.widget<TextField>(find.byType(TextField)).controller!;
+    expect(text().text, 'SG 10 RT');
+    await _pump(tester, field('SUN2000-5KTL'));
+    await tester.pump();
+    expect(text().text, 'SUN2000-5KTL');
+    expect(find.text('SUN2000-10KTL'), findsNothing); // no list while idle
+  });
+
   group('BrixSearchField with a backend', () {
     testWidgets('waits for the pause, shows a loader, then the answer', (
       tester,
