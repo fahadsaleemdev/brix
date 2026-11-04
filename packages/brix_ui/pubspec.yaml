@@ -1,6 +1,6 @@
 name: brix_ui
 description: "Flutter widgets that follow your theme: buttons, text fields, select and search, cards, sheets, dialogs, toasts and a loader, in light and dark. Part of the brix family."
-version: 1.2.0
+version: 1.2.1
 repository: https://github.com/mrubaz/brix/tree/main/packages/brix_ui
 issue_tracker: https://github.com/mrubaz/brix/issues
 topics:
@@ -44,9 +44,3 @@ screenshots:
     path: doc/screenshots/dialogs.png
   - description: "Success toasts at the top of the screen."
     path: doc/screenshots/toast.png
-  - description: "Buttons three ways: default, a theme style, the app's own widget."
-    path: doc/screenshots/buttons_custom.png
-  - description: "Text fields three ways: default, underlined with the label inside, the app's own widget."
-    path: doc/screenshots/text_fields_custom.png
-  - description: "Dialogs and toasts your way: default, a plain style, the app's own card, a bottom toast."
-    path: doc/screenshots/dialogs_toasts_custom.png

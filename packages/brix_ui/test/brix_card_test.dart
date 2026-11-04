@@ -99,6 +99,49 @@ void main() {
     expect(tester.getSize(find.byWidget(strip)).width, 6);
   });
 
+  testWidgets('an accent card lays out a LayoutBuilder child (no '
+      'intrinsic sizes asked)', (tester) async {
+    await _pump(
+      tester,
+      BrixCard(
+        accentColor: Colors.green,
+        // Like a network image that sizes itself from its constraints.
+        child: LayoutBuilder(
+          builder: (_, constraints) =>
+              SizedBox(height: 80, child: Text('w ${constraints.maxWidth}')),
+        ),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    final strip = find.descendant(
+      of: find.byType(BrixCard),
+      matching: find.byType(ColoredBox),
+    );
+    // The strip runs the full height of the content.
+    expect(tester.getSize(strip).height, greaterThanOrEqualTo(80));
+  });
+
+  testWidgets('the accent strip sits on the leading edge in RTL too', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      const Directionality(
+        textDirection: TextDirection.rtl,
+        child: BrixCard(accentColor: Colors.green, child: Text('Paid')),
+      ),
+    );
+    final card = tester.getRect(find.byType(BrixCard));
+    final strip = tester.getRect(
+      find.descendant(
+        of: find.byType(BrixCard),
+        matching: find.byType(ColoredBox),
+      ),
+    );
+    expect(strip.right, closeTo(card.right, 1.5));
+  });
+
   testWidgets('theme card style, then the card style on top', (tester) async {
     await _pump(
       tester,

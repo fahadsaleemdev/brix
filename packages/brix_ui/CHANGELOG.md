@@ -1,3 +1,9 @@
+## 1.2.1
+
+- Fix: a `BrixCard` with an `accentColor` no longer crashes when its content has a `LayoutBuilder` inside (network images, adaptive layouts). The strip is drawn without asking the content for intrinsic sizes and still runs the full height, on the leading edge in right-to-left too.
+- pub.dev: the gallery lists 10 screenshots (its limit); the customization screenshots stay in the README.
+- Docs on the `BrixButton` and `BrixBreakpoints` constructors.
+
 ## 1.2.0
 
 - New `BrixCard`: a surface for your own content with the theme's colour, corners, shadow and padding, an optional `accentColor` strip, and `onTap` with a press effect and a light tap feel. Change it with `BrixTheme(card: BrixCardStyle(...))`, a card's own `style`, or `cardBuilder`.

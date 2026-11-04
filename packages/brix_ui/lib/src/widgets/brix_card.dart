@@ -149,25 +149,28 @@ class _DefaultCard extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: radius,
+        // A Stack, not IntrinsicHeight + Row: the strip takes the card's
+        // height without asking the content for intrinsic sizes, which a
+        // LayoutBuilder inside (network images, adaptive layouts) cannot
+        // give.
         child: accent == null
             ? Padding(padding: style.padding!, child: data.child)
-            : IntrinsicHeight(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ColoredBox(
-                      color: accent,
-                      child: SizedBox(width: style.accentWidth ?? 4),
+            : Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      start: style.accentWidth ?? 4,
                     ),
-                    Flexible(
-                      child: Padding(
-                        padding: style.padding!,
-                        child: data.child,
-                      ),
-                    ),
-                  ],
-                ),
+                    child: Padding(padding: style.padding!, child: data.child),
+                  ),
+                  PositionedDirectional(
+                    start: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: style.accentWidth ?? 4,
+                    child: ColoredBox(color: accent),
+                  ),
+                ],
               ),
       ),
     );

@@ -26,6 +26,7 @@ import 'brix_loader.dart';
 /// BrixButton(label: 'Log in', isLoading: loading, onPressed: login)
 /// ```
 class BrixButton extends StatefulWidget {
+  /// The main action, filled with `colors.primary` (or the gradient).
   const BrixButton({
     super.key,
     required this.label,
@@ -39,6 +40,7 @@ class BrixButton extends StatefulWidget {
     this.builder,
   }) : variant = BrixButtonVariant.filled;
 
+  /// The quieter second action, outlined in `colors.primary`.
   const BrixButton.outlined({
     super.key,
     required this.label,
@@ -52,6 +54,7 @@ class BrixButton extends StatefulWidget {
   }) : gradient = false,
        variant = BrixButtonVariant.outlined;
 
+  /// Delete, log out: filled with `colors.danger`.
   const BrixButton.destructive({
     super.key,
     required this.label,
