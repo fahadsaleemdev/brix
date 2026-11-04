@@ -9,6 +9,7 @@ import 'brix_window_size.dart';
 /// BrixTheme.light(breakpoints: const BrixBreakpoints(medium: 700))
 /// ```
 class BrixBreakpoints {
+  /// Breakpoints in logical pixels; leave one out to keep its default.
   const BrixBreakpoints({
     this.medium = 600,
     this.expanded = 840,
@@ -37,6 +38,7 @@ class BrixBreakpoints {
     return BrixWindowSize.compact;
   }
 
+  /// A copy with the given breakpoints changed.
   BrixBreakpoints copyWith({
     double? medium,
     double? expanded,
